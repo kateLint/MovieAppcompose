@@ -38,6 +38,7 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.compose.movieappcompose.navigation.MovieNavigation
 import com.compose.movieappcompose.ui.theme.MovieAppcomposeTheme
 
 class MainActivity : ComponentActivity() {
@@ -45,56 +46,23 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             MyApp {
-                MainContent()
+                MovieNavigation()
             }
         }
     }
 }
 
-
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyApp(content: @Composable () -> Unit){
     MovieAppcomposeTheme {
-        Scaffold(
-            topBar = {
-                TopAppBar(
-                    colors = TopAppBarDefaults.mediumTopAppBarColors(
-                        containerColor = MaterialTheme.colorScheme.primaryContainer,
-                        titleContentColor = MaterialTheme.colorScheme.primary,
-                    ),
-                    title = {
-                        Text("Movies")
-                    }
-                )
-            },
-        ) { innerPadding ->
-            content()
-            // scrollContent()
-            //ScrollContent(innerPadding)
-        }
+        content()
     }
 
 }
 
 
 
-@Composable
-fun MainContent(movieList: List<String> = listOf("Avatar", "300", "500", "7000",  "300", "500", "7000", "Harry Poter")){
 
-        Column(modifier = Modifier.padding(top = 60.dp)) {
-            LazyColumn(modifier = Modifier){
-                items(movieList.size){index->
-                    MovieRow(movie =  movieList[index]){ movie ->
-
-
-                    }
-                    //Text(text = movieList[index])
-                }
-            }
-        }
-}
 
 @Composable
 fun MovieRow(movie: String, onItemclick: (String) -> Unit){
@@ -126,6 +94,6 @@ fun MovieRow(movie: String, onItemclick: (String) -> Unit){
 @Composable
 fun GreetingPreview() {
    MyApp {
-       MainContent()
+      MovieNavigation()
    }
 }
