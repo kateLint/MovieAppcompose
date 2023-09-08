@@ -3,7 +3,6 @@ package com.compose.movieappcompose.screen.home
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -14,10 +13,11 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.compose.movieappcompose.MovieRow
+import com.compose.movieappcompose.model.Movie
+import com.compose.movieappcompose.model.getMovies
 import com.compose.movieappcompose.navigation.MovieScreens
+import com.compose.movieappcompose.widgets.MovieRow
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -37,7 +37,7 @@ fun HomeScreen(navController: NavController){
         },
     ) {
 
-        MainContent(Modifier.padding(top =  it.calculateTopPadding()),navController = navController)
+        MainContent(Modifier.padding(top =  it.calculateTopPadding()), navController = navController)
 
         // scrollContent()
         //ScrollContent(innerPadding)
@@ -45,7 +45,10 @@ fun HomeScreen(navController: NavController){
 }
 
 @Composable
-fun MainContent(modifier: Modifier, navController: NavController, movieList: List<String> = listOf("Avatar", "300", "500", "7000",  "300", "500", "7000", "Harry Poter", "7000",  "300", "500", "7000", "Harry Poter")){
+fun MainContent(
+    modifier: Modifier, navController: NavController,
+    movieList: List<Movie> = getMovies()
+){
 
     Column(modifier = modifier
         .fillMaxSize()) {
