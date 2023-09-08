@@ -3,6 +3,7 @@
 package com.compose.movieappcompose.screen.details
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -12,10 +13,15 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -29,11 +35,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.compose.movieappcompose.screen.home.MainContent
+import coil.compose.rememberImagePainter
+import com.compose.movieappcompose.model.Movie
+import com.compose.movieappcompose.model.getMovies
+import com.compose.movieappcompose.widgets.MovieRow
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun DetailsScreen(navController: NavController, movieData: String?){
+fun DetailsScreen(navController: NavController, movieId: String?){
+
+    val newMovieList = getMovies().filter {movie ->
+        movie.imdbID == movieId
+
+    }
 
     Scaffold(
         topBar = {
@@ -59,19 +73,44 @@ fun DetailsScreen(navController: NavController, movieData: String?){
     ) {
 
         Surface (modifier = Modifier
-            .padding(top =  it.calculateTopPadding())
-        .fillMaxHeight()
-        .fillMaxWidth()
+            .padding(top = it.calculateTopPadding())
+            .fillMaxHeight()
+            .fillMaxWidth()
     ){
         Column (horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center){
-
-            Text(text = "Details Screen $movieData", style = MaterialTheme.typography.headlineLarge)
-
+            verticalArrangement = Arrangement.Top){
+            MovieRow(movie = newMovieList.first(),{} )
+            Spacer(modifier = Modifier.height(8.dp))
+            Divider()
+            Text(text = "Movie Images")
+            HorizontalScrolableImageView(newMovieList)
         }
 
     }
 
     }
 
+}
+
+@Composable
+private fun HorizontalScrolableImageView(newMovieList: List<Movie>) {
+    LazyRow {
+        items(newMovieList[0].Images) { image ->
+            Card(
+                modifier = Modifier
+                    .padding(12.dp)
+                    .size(240.dp),
+                elevation = CardDefaults.cardElevation(5.dp)
+            ) {
+                Image(
+                    painter = rememberImagePainter(data = image),
+                    contentDescription = "Movie Poster",
+                    modifier = Modifier.fillMaxWidth()
+
+                )
+
+            }
+
+        }
+    }
 }
